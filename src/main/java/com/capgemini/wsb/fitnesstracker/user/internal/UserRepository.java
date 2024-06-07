@@ -3,8 +3,11 @@ package com.capgemini.wsb.fitnesstracker.user.internal;
 import com.capgemini.wsb.fitnesstracker.user.api.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 interface UserRepository extends JpaRepository<User, Long> {
 
@@ -20,4 +23,18 @@ interface UserRepository extends JpaRepository<User, Long> {
                         .findFirst();
     }
 
+default List<User> findByAgeGreaterThan(int age) {
+        LocalDate cutoffDate = LocalDate.now().minusYears(age); {
+        return findAll().stream()
+                .filter(user -> user.getBirthdate().isBefore(cutoffDate))
+                .collect(Collectors.toList());
+    }
+
+    }
+
+
+
 }
+
+
+

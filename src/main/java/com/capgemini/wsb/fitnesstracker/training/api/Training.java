@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 import java.util.Date;
 @Entity
 @Table(name = "trainings")
@@ -40,13 +42,83 @@ public class Training {
     @Column(name = "average_speed")
     private double averageSpeed;
 
+   @Column(name = "date")
+    private LocalDate date;
+
+    public Training(Date endTime, Date startTime, double distance, double averageSpeed) {
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public ActivityType getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(ActivityType activityType) {
+        this.activityType = activityType;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public double getAverageSpeed() {
+        return averageSpeed;
+    }
+
+    public void setAverageSpeed(double averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
+
     public Training(
             final User user,
             final Date startTime,
             final Date endTime,
             final ActivityType activityType,
             final double distance,
-            final double averageSpeed) {
+            LocalDate date, final double averageSpeed) {
         this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -54,5 +126,4 @@ public class Training {
         this.distance = distance;
         this.averageSpeed = averageSpeed;
     }
-
 }

@@ -3,6 +3,7 @@ package com.capgemini.wsb.fitnesstracker.user.internal;
 import com.capgemini.wsb.fitnesstracker.user.api.User;
 import com.capgemini.wsb.fitnesstracker.user.api.UserProvider;
 import com.capgemini.wsb.fitnesstracker.user.api.UserService;
+import com.capgemini.wsb.fitnesstracker.user.internal.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 class UserServiceImpl implements UserService, UserProvider {
-
+    //rivate static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
     @Override
@@ -35,10 +36,36 @@ class UserServiceImpl implements UserService, UserProvider {
     public Optional<User> getUserByEmail(final String email) {
         return userRepository.findByEmail(email);
     }
+    @Override
+    public List<User> getUsersByAge(final int age) {
+        return userRepository.findByAgeGreaterThan(age);
+    }
+    @Override
+    public List<User> findAllUsers() { return userRepository.findAll(); }
+    @Override
+    public boolean deleteUser(Long id) {
+        if(userRepository.existsById(id)){
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public User updateUser(Long id, User updatedUser){
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setFirstName(updatedUser.getFirstName());
+                    user.setLastName(updatedUser.getLastName());
+                    user.setBirthdate(updatedUser.getBirthdate());
+                    user.setEmail(updatedUser.getEmail());
+
+                    return userRepository.save(user);
+                })
+                .orElseGet(() -> {
+                    updatedUser.setId(id);
+                    return userRepository.save(updatedUser);
+                });
     }
 
 }
